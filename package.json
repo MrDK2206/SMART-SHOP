@@ -3,13 +3,16 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "vite",
     "dev:server": "nodemon server/server.js",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "node server/server.js",
+    "start": "node --trace-uncaught --trace-warnings server/server.js",
     "seed": "node server/seeder.js"
   },
   "dependencies": {
