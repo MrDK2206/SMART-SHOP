@@ -1,0 +1,27 @@
+import crypto from "crypto";
+import Razorpay from "razorpay";
+
+export function getRazorpayClient() {
+  const key_id = process.env.RAZORPAY_KEY_ID;
+  const key_secret = process.env.RAZORPAY_KEY_SECRET;
+
+  if (!key_id || !key_secret) {
+    throw new Error("Razorpay credentials are not configured");
+  }
+
+  return new Razorpay({ key_id, key_secret });
+}
+
+export function verifyRazorpaySignature({
+  razorpayOrderId,
+  razorpayPaymentId,
+  razorpaySignature
+}) {
+  const body = `${razorpayOrderId}|${razorpayPaymentId}`;
+  const expectedSignature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+    .update(body.toString())
+    .digest("hex");
+
+  return expectedSignature === razorpaySignature;
+}
